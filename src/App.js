@@ -14,16 +14,7 @@ class App extends Component {
     showPersons: false
   }
 
-  switchNameHandler = (newName) => {    
-    // dont do this --> this.state.persons[0].name = 'Maximilian'
-    this.setState({
-      persons:[
-        {name:  newName, age: 28},
-        {name: 'Manu', age: 29},
-        {name: 'Stephanie', age: 27}
-      ]
-    }  )
-  }
+
   //only way to change the DOM is to change the state or props then react looks for new changes to the dom
   //only updates the changes across the dom
 
@@ -56,12 +47,14 @@ class App extends Component {
     //this is js area not jsx
 
     let persons = null;
-
+//common use map to output lists in reactjs
     if (this.state.showPersons){
       persons= (
         <div>
           {this.state.persons.map(person => {
-            return <Person name={person.name} age={person.age} />
+            return <Person 
+                  name={person.name} 
+                  age={person.age} />
           })}
         
         </div>
