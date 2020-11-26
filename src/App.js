@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person'; //lower case words are associated with HTML uppercase w JSX
+import Radium from 'radium';
+
 
 class App extends Component {
   //managed within just class, use function properties
   state = {
     persons: [
-      {name: 'Max', age: 28},
-      {name: 'Manu', age: 29},
-      {name: 'Stephanie', age: 26}
+      {id:"12s", name: 'Max', age: 28},
+      {id:"123s", name: 'Manu', age: 29},
+      {id:"se32s", name: 'Stephanie', age: 26}
     ],
     otherState: 'wont be touched',
-    showPersons: false
+    showPersons: false,
+    pageColor: false
   }
 
   //delete a person from the array
@@ -23,30 +26,53 @@ class App extends Component {
   }
 
 
-  nameChangedHandler = (event) => {
-    this.setState({
-      persons: [
-        {name:  "Max", age: 28},
-        {name: event.target.value, age: 29},
-        {name: 'Stephanie', age: 27}
-      ]
-    })
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p=>{
+      return p.id === id;
+    });
+
+    //modern approach
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+    this.setState({ persons: persons });
+
+    // alternative - const person = Object.assign({}, this.state.person);
+
   }
 
 
   togglePersonsHandler = () => {
-      const doesShow = this.state.showPersons;
-      this.setState({showPersons: !doesShow})
+    const doesShow = this.state.showPersons;
+    this.setState({showPersons: !doesShow});
+  }
+
+  toggleBackgroundHandler = () => {
+    const doesShow = this.state.pageColor;
+    this.setState({pageColor: !doesShow});
   }
 
   render() {
     const style = {
-      backgroundColor: 'light brown',
+      backgroundColor: 'green',
       font: 'inherit',
       borderColor: 'blue',
       padding: '8px',
       cursor: 'pointer'
     };
+
+    const pageStyle = {
+      backgroundColor: 'orange',
+      margin: '100px',
+      padding: '15px',
+      borderColor: 'pink'
+    }
 
     //this is js area not jsx
 
@@ -59,23 +85,45 @@ class App extends Component {
             return <Person 
                   click={() => this.deletePersonHandler(index)}
                   name={person.name} 
-                  age={person.age} />
+                  age={person.age} 
+                  key={person.id}
+                  changed={(event) => this.nameChangedHandler(event, person.id)}
+                  />
           })}
         
         </div>
       );
+      style.backgroundColor = 'red';
     }
-    
+    if (this.state.pageColor){
+      style.backgroundColor = 'purple';
+    }
+
+    let classes = [];
+
+    if(this.state.persons.length <= 2){
+      classes.push('red'); // classes will be red
+    }
+    if(this.state.persons.length <=1){
+      classes.push('bold');
+    }
+
+
+
     return (
-      <div className="App">
+      <div 
+        className="App"
+        style={pageStyle}
+        >
         <h1>Duncan Brown</h1>
-        <h2>i am here to learn</h2>    
+        <p className={classes.join(' ')}>i am here to learn</p>    
         <button 
           style = {style}
-          onClick={this.togglePersonsHandler}>Switch Name</button>
-        { persons }
+          onClick={this.togglePersonsHandler}
+          onDoubleClick={this.toggleBackgroundHandler} >Toggle Name</button>
+        {persons}
       </div>
     );}
 }
 
-export default App;
+export default Radium(App);
