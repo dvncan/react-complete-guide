@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 
-import './App.css';
+import classes from './App.module.css';
 import Person from './Person/Person'; //lower case words are associated with HTML uppercase w JSX
-
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   //managed within just class, use function properties
@@ -60,68 +60,57 @@ class App extends Component {
   }
 
   render() {
-    const style = {
-
-    };
-
-    const pageStyle = {
-      backgroundColor: 'orange',
-      margin: '100px',
-      padding: '15px',
-      borderColor: 'pink'
-    }
-
     //this is js area not jsx
-
+    //variable to dynamically change the button color
+    let btnClass= [classes.button];
     let persons = null;
 //common use map to output lists in reactjs
     if (this.state.showPersons){
       persons= (
         <div>
           {this.state.persons.map((person, index) => {
-            return <Person 
+            //key has to be on the outer method
+            return <ErrorBoundary key={person.id}>
+              <Person 
                   click={() => this.deletePersonHandler(index)}
                   name={person.name} 
                   age={person.age} 
-                  key={person.id}
                   changed={(event) => this.nameChangedHandler(event, person.id)}
-                  />
+                  /></ErrorBoundary>
           })}
         
         </div>
       );
   
-  
-  //    style.backgroundColor = 'red';
-  //    style[':hover'] = {
-  //      backgroundColor: 'salmon',
-  //      color: 'black'
-  //    }
+          //change styles dynamically
+      btnClass.push(classes.Red);
+
     }
     if (this.state.pageColor){
-      style.backgroundColor = 'purple';
+      btnClass.push(classes.Purple);
     }
 
-    let classes = [];
+    //vairable for Text css to change with list len change
+    let assignedClasses = [];
 
     if(this.state.persons.length <= 2){
-      classes.push('red'); // classes will be red
+      assignedClasses.push(classes.red); // classes will be red
     }
     if(this.state.persons.length <=1){
-      classes.push('bold');
+      assignedClasses.push(classes.bold);
     }
 
 
 
     return (
         <div 
-          className="App"
-          style={pageStyle}
+          className={classes.App}
+          //style={pageStyle}
           >
           <h1>Duncan Brown</h1>
-          <p className={classes.join(' ')}>i am here to learn</p>    
+          <p className={assignedClasses.join(' ')}>i am here to learn</p>    
           <button 
-            className="button"
+            className={btnClass.join(' ')}
             onClick={this.togglePersonsHandler}
             onDoubleClick={this.toggleBackgroundHandler} >Toggle Name
             </button>

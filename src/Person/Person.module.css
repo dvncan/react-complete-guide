@@ -7,10 +7,10 @@
     text-align: center;
 }
 
-
-/* media query is a way to have logic in css if conditions are met : if window width 500px then person width is 450px
+/*media query is a way to have logic in css if conditions are met : if window width 500px then person width is 450px*/
 @media (min-width: 500px) {
     .Person{
         width: 450px;
     }
-}*/
+}
+
