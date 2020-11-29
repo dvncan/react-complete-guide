@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person'; //lower case words are associated with HTML uppercase w JSX
-import Radium from 'radium';
+//import Radium from 'radium';
+//import {StyleRoot} from 'radium';
 
+import styled from 'styled-components'; // package that mixes css & js very nicely we can use as a react compnonet w styles attached
+
+const StyledButton = styled.button`
+  background-color: ${props=>props.alt ? 'red' : 'green'};
+  font: inherit;
+  border-color: blue;
+  padding: 8px;
+  cursor: pointer;
+  
+  
+  &:hover { // or any psuedo selector but have to start w a ':' this is usable from radium
+    background-color: ${props=>props.alt ? 'salmon' : 'lightgreen'};
+    color: black
+  } 
+`;
 
 class App extends Component {
   //managed within just class, use function properties
@@ -60,11 +76,7 @@ class App extends Component {
 
   render() {
     const style = {
-      backgroundColor: 'green',
-      font: 'inherit',
-      borderColor: 'blue',
-      padding: '8px',
-      cursor: 'pointer'
+
     };
 
     const pageStyle = {
@@ -93,7 +105,13 @@ class App extends Component {
         
         </div>
       );
-      style.backgroundColor = 'red';
+  
+  
+  //    style.backgroundColor = 'red';
+  //    style[':hover'] = {
+  //      backgroundColor: 'salmon',
+  //      color: 'black'
+  //    }
     }
     if (this.state.pageColor){
       style.backgroundColor = 'purple';
@@ -111,19 +129,20 @@ class App extends Component {
 
 
     return (
-      <div 
-        className="App"
-        style={pageStyle}
-        >
-        <h1>Duncan Brown</h1>
-        <p className={classes.join(' ')}>i am here to learn</p>    
-        <button 
-          style = {style}
-          onClick={this.togglePersonsHandler}
-          onDoubleClick={this.toggleBackgroundHandler} >Toggle Name</button>
-        {persons}
-      </div>
+        <div 
+          className="App"
+          style={pageStyle}
+          >
+          <h1>Duncan Brown</h1>
+          <p className={classes.join(' ')}>i am here to learn</p>    
+          <StyledButton 
+            alt={this.state.showPersons}
+            onClick={this.togglePersonsHandler}
+            onDoubleClick={this.toggleBackgroundHandler} >Toggle Name
+            </StyledButton>
+          {persons}
+        </div>
     );}
 }
 
-export default Radium(App);
+export default (App);
